@@ -7,6 +7,7 @@ class Book(models.Model):
     published_date = models.DateField()  # 出版日期
     isbn = models.CharField(max_length=13, unique=True)  # ISBN
     price = models.DecimalField(max_digits=10, decimal_places=2)  # 价格
+    description = models.TextField(blank=True)  # 描述
 
     def __str__(self):
         return self.title
