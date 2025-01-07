@@ -13,6 +13,9 @@ jobs:
     # 1. 检出代码
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        ref: main-migrations
+        fetch-depth: 0  # 拉取完整历史记录
 
     # 2. 设置 Python 环境
     - name: Set up Python
@@ -32,14 +35,6 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config pull.rebase false  # 设置合并策略为 merge
-        
-        git branch
-
-        # 获取所有远程分支信息
-        git fetch origin main-migrations
-        git branch
-        git checkout main-migrations
-        git branch
         git pull origin main
 
     # 5. 生成迁移文件
