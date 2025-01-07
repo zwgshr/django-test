@@ -40,11 +40,9 @@ jobs:
       id: check_migrations
       run: |
         if [ -n "$(git status --porcelain)" ]; then
-          echo "::set-output name=has_changes::true"
-          echo "has_changes=true" >> $GITHUB_ENV
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
         else
-          echo "::set-output name=has_changes::false"
-          echo "has_changes=false" >> $GITHUB_ENV
+          echo "has_changes=false" >> "$GITHUB_OUTPUT"
         fi
 
     # 6. 提交并推送迁移文件到 main-migrations 分支
