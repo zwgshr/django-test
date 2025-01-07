@@ -32,8 +32,8 @@ jobs:
         python manage.py makemigrations
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        # 确保所有迁移文件都被追踪
-        git add */migrations/*.py
+        # 使用 -f 强制添加被忽略的迁移文件
+        git add -f */migrations/*.py
 
     # 5. 检查是否有新迁移文件
     - name: Check for migrations
@@ -55,6 +55,6 @@ jobs:
       run: |
         git fetch origin main-migrations || true
         git checkout -B main-migrations
-        git add */migrations/*.py
+        git add -f */migrations/*.py
         git commit -m "Auto-generated migrations [skip ci]"
         git push -f origin main-migrations
