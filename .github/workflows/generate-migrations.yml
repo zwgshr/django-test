@@ -26,7 +26,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 4. 生成迁移文件
+    # 4. 切换到 main-migrations 分支
+    - name: Switch to migrations branch
+      run: |
+        git fetch origin main-migrations || git checkout -b main-migrations
+        git checkout main-migrations
+        git pull origin main || true
+
+    # 5. 生成迁移文件
     - name: Generate migrations
       run: |
         python manage.py makemigrations
@@ -35,7 +42,7 @@ jobs:
         # 使用 -f 强制添加被忽略的迁移文件
         git add -f */migrations/*.py
 
-    # 5. 检查是否有新迁移文件
+    # 6. 检查是否有新迁移文件
     - name: Check for migrations
       id: check_migrations
       run: |
@@ -45,14 +52,12 @@ jobs:
           echo "has_changes=false" >> "$GITHUB_OUTPUT"
         fi
 
-    # 6. 提交并推送迁移文件到 main-migrations 分支
+    # 7. 提交并推送迁移文件
     - name: Commit and push migrations
       if: env.has_changes == 'true'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git fetch origin main-migrations || true
-        git checkout -B main-migrations
         git add -f */migrations/*.py
         git commit -m "Auto-generated migrations [skip ci]"
         git push -f origin main-migrations
