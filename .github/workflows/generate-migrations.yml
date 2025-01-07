@@ -32,14 +32,18 @@ jobs:
         python manage.py makemigrations
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
+        # 确保所有迁移文件都被追踪
+        git add */migrations/*.py
 
     # 5. 检查是否有新迁移文件
     - name: Check for migrations
       id: check_migrations
       run: |
         if [ -n "$(git status --porcelain)" ]; then
+          echo "::set-output name=has_changes::true"
           echo "has_changes=true" >> $GITHUB_ENV
         else
+          echo "::set-output name=has_changes::false"
           echo "has_changes=false" >> $GITHUB_ENV
         fi
 
@@ -49,7 +53,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git checkout -b main-migrations || git checkout main-migrations
-        git add .
-        git commit -m "Auto-generated migrations"
-        git push origin main-migrations
+        git fetch origin main-migrations || true
+        git checkout -B main-migrations
+        git add */migrations/*.py
+        git commit -m "Auto-generated migrations [skip ci]"
+        git push -f origin main-migrations
