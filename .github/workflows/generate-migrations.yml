@@ -33,9 +33,12 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config pull.rebase false  # 设置合并策略为 merge
         
+        # 获取所有远程分支信息
+        git fetch origin main-migrations
+        
         # 检查远程分支是否存在，如果不存在则从当前分支创建
         if git ls-remote --heads origin main-migrations | grep main-migrations; then
-          git checkout main-migrations
+          git checkout -b main-migrations origin/main-migrations
         else
           git checkout -b main-migrations
           git push -u origin main-migrations
