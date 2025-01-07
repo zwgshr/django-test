@@ -32,8 +32,16 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config pull.rebase false  # 设置合并策略为 merge
-        git checkout main-migrations
-        git pull origin main
+        
+        # 检查远程分支是否存在，如果不存在则从当前分支创建
+        if git ls-remote --heads origin main-migrations | grep main-migrations; then
+          git checkout main-migrations
+        else
+          git checkout -b main-migrations
+          git push -u origin main-migrations
+        fi
+        
+        git pull origin main --no-rebase --allow-unrelated-histories || true
 
     # 5. 生成迁移文件
     - name: Generate migrations
