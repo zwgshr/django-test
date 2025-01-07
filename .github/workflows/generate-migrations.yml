@@ -29,6 +29,8 @@ jobs:
     # 4. 切换到 main-migrations 分支
     - name: Switch to migrations branch
       run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
         git config pull.rebase false  # 设置合并策略为 merge
         git fetch origin main-migrations || git checkout -b main-migrations
         git checkout main-migrations
