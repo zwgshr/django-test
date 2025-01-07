@@ -29,9 +29,10 @@ jobs:
     # 4. 切换到 main-migrations 分支
     - name: Switch to migrations branch
       run: |
+        git config pull.rebase false  # 设置合并策略为 merge
         git fetch origin main-migrations || git checkout -b main-migrations
         git checkout main-migrations
-        git pull origin main || true
+        git pull origin main --no-rebase || true
 
     # 5. 生成迁移文件
     - name: Generate migrations
