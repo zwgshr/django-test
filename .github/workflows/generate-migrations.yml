@@ -33,11 +33,13 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config pull.rebase false  # 设置合并策略为 merge
         
+        git branch
+
         # 获取所有远程分支信息
         git fetch origin main-migrations
-        
+        git branch
         git checkout main-migrations
-        
+        git branch
         git pull origin main
 
     # 5. 生成迁移文件
